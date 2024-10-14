@@ -5,7 +5,10 @@ date_default_timezone_set("Asia/Almaty");
 header('Content-Type: application/json');
 
 
-
+require 'libs/Shared/Rest.php';
+$rest = new \Shared\Rest($_SERVER);
+$outData = json_encode($rest->getData());
+echo $outData;
 
 
 //
