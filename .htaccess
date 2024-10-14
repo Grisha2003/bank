@@ -1,0 +1,74 @@
+SetEnv TZ Asia/Almaty
+#Разрешает следовать символьным ссылкам
+Options +FollowSymLinks
+#Отключает возможность "мультиязычного" контента, который может быть возвращён при отсутствии конкретного файла.
+Options -MultiViews
+#Запрещает отображение списка файлов в директории, если в ней нет файла индекса
+Options -Indexes
+#Устанавливает кодировку по умолчанию для файлов в UTF-8
+AddDefaultCharset UTF-8
+
+# Включаем модуль переписывания URL
+RewriteEngine On
+
+# Правило для всех запросов, направленных на фронт
+# Все запросы перенаправляются на ajax.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ ajax.php [L,QSA]
+
+# Правило для удаления расширения .php из URL
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/]+)/?$ $1.php [L]
+
+# Перенаправление на страницу 404.php при ошибке
+ErrorDocument 404 /404.php
+
+
+
+
+
+
+#SetEnv TZ Asia/Almaty
+#
+#Options +FollowSymLinks
+#Options -MultiViews
+#Options -Indexes
+#AddDefaultCharset UTF-8
+#
+#<ifModule mod_headers.c>
+#    Header set X-Robots-Tag "noindex, nofollow" 
+#    Header always edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure;SameSite=None
+#    SetEnvIf Origin "^http(s)?://(.+\.)?(admin.mybuh.kz|192.168.1.79|localhost:3000|localhost:3001|192.168.1.113:3000|192.168.1.242:3000|192.168.1.241:3000|192.168.1.237:3000|192.168.1.214:3000|192.168.1.243:3000|192.168.1.236:3000|192.168.1.119:3000|192.168.1.169:3000)$" origin_is=$0
+#    Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+#    Header add Access-Control-Allow-Credentials true
+#    <FilesMatch "index.html$">
+#      Header set Cache-Control "no-cache"
+#    </FilesMatch>
+#</ifModule>
+#<IfModule mod_rewrite.c>
+#	RewriteEngine on
+#	RewriteBase /
+#    
+#    #redirect tnved img link
+#	RewriteRule ^(.*)Explanations(.*)$ ajax/loadimg.php/1$ [L]
+#	RewriteRule ^(.*)orderbnpl/ BNPL/bnplEnd.php [L]
+#	RewriteRule ^(.*)bnplpreapp/ BNPL/bnplAPI.php [L]
+#	
+#	RewriteCond %{REQUEST_FILENAME} !-f
+#	RewriteCond %{REQUEST_URI} !(.*)/$
+#	RewriteRule ^(.*)$ /$1/ [R=301,L]
+#
+#	RewriteCond %{REQUEST_URI} !^/wgm/.*$
+#	RewriteCond %{REQUEST_FILENAME} !-d
+#	RewriteCond %{REQUEST_FILENAME} !-f
+#	RewriteRule ^(.*)$ build/index.html [L,QSA]
+#
+#</IfModule>
+#
+#<Files "saved">
+#    Order Deny,Allow
+#    Deny from all
+#</Files>
+#
+#DirectoryIndex build/index.html build/index.shtml build/index.pl build/index.cgi build/index.php
