@@ -23,4 +23,9 @@ abstract class Template {
     {
         
     }
+    
+    public function request()
+    {
+        
+    }
 }

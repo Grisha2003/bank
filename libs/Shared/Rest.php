@@ -119,7 +119,7 @@ class Rest {
         if ($this->status) {
             $arrUrl = explode('/', $this->url);
             if (isset($arrUrl[1])) {
-                $retNamespace = $arrUrl[1];
+                $retNamespace = mb_strtoupper(mb_substr($arrUrl[1], 0, 1)) . mb_substr($retNamespace, 1);
             } else {
                 $this->status = false;
                 $this->error = 'Неверный url.(namespace)';
@@ -134,7 +134,7 @@ class Rest {
         if ($this->status) {
             $arrUrl = explode('/', $this->url);
             if (isset($arrUrl[2])) {
-                $retClass = $arrUrl[2];
+                $retClass = mb_strtolower(mb_substr($arrUrl[2], 0, 1)) . mb_substr($retClass, 1);
             } else {
                 $this->status = false;
                 $this->error = 'Неверный url.(class)';
