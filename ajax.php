@@ -1,14 +1,37 @@
 <?php
 require_once 'autoload.php';
+require 'libs/Shared/Rest.php';
 
 date_default_timezone_set("Asia/Almaty");
 header('Content-Type: application/json');
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+header('Content-Security-Policy: default-src \'self\'');
 
+$serverData = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
 
-require 'libs/Shared/Rest.php';
-$rest = new \Shared\Rest($_SERVER);
-$outData = json_encode($rest->getData());
-echo $outData;
+global $outData;
+
+$rest = new \Shared\Rest($serverData);
+$data = $rest->getData();
+
+if ($data['status'] && empty($data['error'])) {
+    $namespace = $data['namespace'];
+    $class = $data['class'];
+    $file = __DIR__ . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . $namespace . DIRECTORY_SEPARATOR . $class;
+    if (file_exists($file)) {
+        $namespace = $data['namespace'];
+        $class = $data['class'];
+        $obj = '\\' . $namespace . '\\' . $class;
+        $object = new $obj();
+        $outData = $object->execute($data['params']);
+    } else {
+        $outData = '404';
+    }
+} else {
+    $outData = $data['error'];
+}
+echo htmlspecialchars($outData, ENT_QUOTES, 'UTF-8');
 
 
 //
