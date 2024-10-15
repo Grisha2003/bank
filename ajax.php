@@ -15,6 +15,14 @@ global $outData;
 $rest = new \Shared\Rest($serverData);
 $data = $rest->getData();
 
+
+
+function dbConn($settings)
+{
+    $connectDB = pg_connect("host={$settings['host']} port={$settings['port']} dbname={$settings['base']} user={$settings['user']} password={$settings['password']}");
+    
+}
+
 if ($data['status'] && empty($data['error'])) {
     $namespace = $data['namespace'];
     $class = $data['class'];
