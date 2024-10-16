@@ -51,7 +51,17 @@ class Users extends \Shared\Template
     
     protected function create()
     {
-        return;
+        $retArr = [];
+        $query = "INSERT INTO users(name, surname, pin) VALUES ($1, $2, $3)";
+        $dbData = pg_query_params($this->db, $query, $this->params);
+        
+        if ($dbData != false) {
+            $res = pg_fetch_assoc($dbData);
+            $this->outData = $res;
+        } else {
+            $this->status = false;
+            $this->error = 'Ошибка запроса в бд';
+        }
     }
     
     protected function delete()
@@ -66,7 +76,18 @@ class Users extends \Shared\Template
     
     private function validateCreate($data)
     {
+        if (!isset($data['create']['pin'])) {
+            $this->status = false;
+            $this->error = 'Неверные параметры.';
+        }
         
+        if ($this->status) {
+            $this->params = [
+                $data['name'],
+                $data['surname'],
+                $data['pin']
+            ];
+        }
     }
     
     private function validateRead($data)

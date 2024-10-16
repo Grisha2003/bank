@@ -17,15 +17,17 @@ abstract class Template {
             $inData,
             $params,
             $status,
-            $outDara,
+            $outData,
             $error,
-            $method;
+            $method,
+            $db;
     
-    public function __construct($method)
+    public function __construct($method, $db)
     {
         $this->status = true;
         $this->params = [];
         $this->method = $method;
+        $this->db = $db;
     }
     
     abstract protected function read();
@@ -52,16 +54,9 @@ abstract class Template {
                 $this->status = false;
                 $this->error = 'Нет такого метода';
         }
-        
-        if ($this->status) {
-            
-        } else {
-            //ERROR
-        }
+        return $this->status ? $this->outData : $this->error;
+       
     }
     
-    public function request()
-    {
-        
-    }
+    
 }
