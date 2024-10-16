@@ -18,9 +18,9 @@ $data = $rest->getData();
 
 
 
-function dbConn()
+function dbConn($host, $username, $password, $database)
 {
-    $connectDB = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=vovazero123");
+    $connectDB = $connection = mysqli_connect($host, $username, $password, $database);
     return $connectDB;
 }
 
@@ -33,7 +33,7 @@ if ($data['status'] && empty($data['error'])) {
         $namespace = $data['namespace'];
         $class = $data['class'];
         $obj = '\\' . $namespace . '\\' . $class;
-        $db = dbConn();
+        $db = dbConn('localhost:3306', 'p-345076_base', 'vovazero123', 'p-345076_base');
         $object = new $obj($data['method'], $db);
         $outData = $object->execute($data['params']);
     } else {

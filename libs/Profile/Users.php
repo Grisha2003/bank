@@ -37,6 +37,8 @@ class Users extends \Shared\Template
             'create' => [
                 'name' => isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
                 'surname' => isset($data['surname']) && $data['surname'] != '' ? $data['surname'] : null,
+                'group' => isset($data['group']) && $data['group'] != '' ? $data['group'] : null,
+                'sum' => isset($data['sum']) && (int) $data['sum'] > 0 ? (int) $data['sum'] : null,
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
             ],
             'read' => [
@@ -56,10 +58,10 @@ class Users extends \Shared\Template
     protected function read() 
     {
         if ($this->status) {
-            $query = "SELECT * FROM users WHERE pin = $1";
-            $dbData = pg_query_params($this->db, $query, $this->params);
+            $query = "SELECT * FROM users WHERE pin = " . $this->params['pin'];
+            $dbData = mysqli_query($this->db, $query);
             if ($dbData != false) {
-                $res = pg_fetch_assoc($dbData);
+                $res = mysqli_fetch_assoc($dbData);
                 $this->outData = ['answer' => $res];
             } else {
                 $this->status = false;
@@ -71,8 +73,8 @@ class Users extends \Shared\Template
     protected function create() 
     {
         if ($this->status) {
-            $query = "INSERT INTO users(name, surname, pin) VALUES ($1, $2, $3)";
-            $dbData = pg_query_params($this->db, $query, $this->params);
+            $query = "INSERT INTO users(name, surname, group, sum, pin) VALUES (".$this->params['name']."," . $this->params['surname'] . "," .$this->params['group'] . ",". $this->params['sum'] .",". $this->params['pin'] . ")";
+            $dbData = mysqli_query($this->db, $query);
 
             if ($dbData != false) {
                 //$res = pg_fetch_assoc($dbData);
@@ -92,8 +94,8 @@ class Users extends \Shared\Template
     protected function edit() 
     {
         if ($this->status) {
-            $query = "UPDATE users SET sum = $1 WHERE id = $2";
-            $dbData = pg_query_params($this->db, $query, $this->params);
+            $query = "UPDATE users SET sum = ". $this->params['sum'] ." WHERE id = " . $this->params['id'];
+            $dbData = mysqli_query($this->db, $query);
             
             if ($dbData != false) {
                //$res = pg_fetch_assoc($dbData);
@@ -114,9 +116,11 @@ class Users extends \Shared\Template
 
         if ($this->status) {
             $this->params = [
-                $data['create']['name'],
-                $data['create']['surname'],
-                $data['create']['pin']
+                'name' => $data['create']['name'],
+                'surname' => $data['create']['surname'],
+                'pin' => $data['create']['pin'],
+                'sum' => $data['create']['sum'],
+                'group' => $data['create']['group']
             ];
         }
     }
@@ -130,7 +134,7 @@ class Users extends \Shared\Template
 
         if ($this->status) {
             $this->params = [
-                $data['read']['pin']
+                'pin' => $data['read']['pin']
             ];
         }
     }
@@ -145,8 +149,8 @@ class Users extends \Shared\Template
         
         if ($this->status) {
             $this->params = [
-                $data['edit']['sum'],
-                $data['edit']['id']
+                'sum' => $data['edit']['sum'],
+                'id' => $data['edit']['id']
             ];
         }
     }
@@ -160,7 +164,7 @@ class Users extends \Shared\Template
         
         if ($this->status) {
             $this->params = [
-                $data['delete']['id']
+                'id' => $data['delete']['id']
             ];
         }
     }
