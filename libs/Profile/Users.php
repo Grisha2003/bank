@@ -83,7 +83,8 @@ class Users extends \Shared\Template
 
             if ($dbData != false) {
                 //$res = pg_fetch_assoc($dbData);
-                $this->outData = ['answer' => 'ok'];
+                //$this->outData = ['answer' => 'ok'];
+                $this->outData = $dbData;//['answer' => 'ok'];
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибка запроса в бд'];
