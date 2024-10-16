@@ -34,7 +34,13 @@ class Users extends \Shared\Template
     
     private function prepareData($data)
     {
-        $params = [];
+        $params = [
+            'create' => [
+                'name'=> isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
+                'surname' => isset($data['surname']) && $data['surname'] != '' ? $data['surname'] : null,
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
+            ]
+        ];
         return $params;
     }
     
