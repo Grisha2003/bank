@@ -9,7 +9,6 @@ header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 header('Content-Security-Policy: default-src \'self\'');
 
-//$serverData = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
 $serverData = $_SERVER;
 
 global $outData;
@@ -47,8 +46,4 @@ if ($data['status'] && empty($data['error'])) {
 }
 echo json_encode($outData);
 
-//
-//$obj = $namespace .$class;
-//echo "Request '" . $in['action'] . "' to object $obj\n";
-//$object = new $obj($srvs);
-//$retData = $object->execute($in);
+

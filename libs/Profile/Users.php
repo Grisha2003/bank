@@ -63,7 +63,12 @@ class Users extends \Shared\Template
             $dbData = mysqli_query($this->db, $query);
             if ($dbData != false) {
                 $res = mysqli_fetch_assoc($dbData);
-                $this->outData = ['data' => $res];
+				if (!empty($res)) {
+                	$this->outData = ['data' => $res];
+				} else {
+					$this->status = false;
+                	$this->error = ['error' => 'Пин-код не найден'];	
+				}
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибак запроса в бд'];
@@ -144,7 +149,7 @@ class Users extends \Shared\Template
     private function validateCreate($data) 
     {
         if (!isset($data['create']['pin'])
-                || $data['create']['pin'] > 4) {
+		   || mb_strlen((string)$data['create']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры.'];
         }
@@ -163,7 +168,7 @@ class Users extends \Shared\Template
     private function validateRead($data) 
     {
         if (!isset($data['read']['pin']) 
-                || $data['read']['pin'] > 4) {
+                || mb_strlen((string)$data['read']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры.'];
         }
@@ -179,7 +184,7 @@ class Users extends \Shared\Template
     {
         if (!isset($data['edit']['pin'])
                 || !isset($data['edit']['sum'])
-                || $data['edit']['pin'] > 4) {
+                || mb_strlen((string)$data['edit']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры'];
         }
@@ -195,7 +200,7 @@ class Users extends \Shared\Template
     private function validateDelete($data) 
     {
         if (!isset($data['delete']['pin'])
-                || $data['delete']['pin'] > 4) {
+                || mb_strlen((string)$data['delete']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры'];
         }
