@@ -58,7 +58,8 @@ class Users extends \Shared\Template
     protected function read() 
     {
         if ($this->status) {
-            $query = "SELECT * FROM users WHERE pin = " . $this->params['pin'];
+            $pin = $this->params['pin'];
+            $query = "SELECT * FROM users WHERE pin = $pin";
             $dbData = mysqli_query($this->db, $query);
             if ($dbData != false) {
                 $res = mysqli_fetch_assoc($dbData);
@@ -73,18 +74,17 @@ class Users extends \Shared\Template
     protected function create() 
     {
         if ($this->status) {
-//            $stmt = $this->db->prepare("INSERT INTO users(name, surname, group, sum, pin) VALUES (?, ?, ?, ?, ?)");
-//            $stmt->bind_param("sssii", $this->params['name'], $this->params['surname'], $this->params['group'], $this->params['sum'], $this->params['pin']);
-//            $stmt->execute();
-            //$query = "INSERT INTO users(name, surname, group, sum, pin) VALUES (".$this->params['name'] . "," . $this->params['surname'] . "," . $this->params['group'] . "," . $this->params['sum'] .",". $this->params['pin'] . ")";
-            $query = "INSERT INTO users(name, surname, group, sum, pin) VALUES ('name', 'surname', 'hey', 123, 123)";
-            //$dbData = $stmt->get_result();
+            $name = $this->params['name'];
+            $surname = $this->params['surname'];
+            $group = $this->params['group'];
+            $sum = $this->params['sum'];
+            $pin = $this->params['pin'];
+            $query = "INSERT INTO users(name, surname, `group`, sum, pin) VALUES ('$name', '$surname', '$group', $sum, $pin)";
             $dbData = mysqli_query($this->db, $query);
 
             if ($dbData != false) {
-                //$res = pg_fetch_assoc($dbData);
-                //$this->outData = ['answer' => 'ok'];
-                $this->outData = $dbData;//['answer' => 'ok'];
+                $this->outData = ['answer' => 'ok'];
+                
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибка запроса в бд'];
@@ -94,17 +94,18 @@ class Users extends \Shared\Template
 
     protected function delete() 
     {
-        return;
+        
     }
 
     protected function edit() 
     {
         if ($this->status) {
-            $query = "UPDATE users SET sum = ". $this->params['sum'] ." WHERE id = " . $this->params['id'];
+            $id = $this->params['id'];
+            $sum = $this->params['sum'];
+            $query = "UPDATE users SET sum = $sum WHERE id = $id";
             $dbData = mysqli_query($this->db, $query);
             
             if ($dbData != false) {
-               //$res = pg_fetch_assoc($dbData);
                $this->outData = ['answer' => 'ok'];
             } else {
                 $this->status = false;

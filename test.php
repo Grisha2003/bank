@@ -1,19 +1,10 @@
 <?php
+$name = 'hell';
+$date = 'z';
+$cde = null;
 
-$settings = [
-    'host'=>'localhost',
-    'port'=>5432,
-    'dbname'=>'postgres',
-    'user'=>'postgres',
-    'password'=>'vovazero123'
-];
-$connectDB = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=vovazero123");
-
-if ($connectDB != false) {
-    print_r("супер");
-    
+if (!isset($name) || (isset($date) && isset($cde))) {
+    print_r("erro");
 } else {
-    print_r("ошибка");
+    print_r("JJJJ");
 }
-
-
