@@ -77,7 +77,7 @@ class Users extends \Shared\Template
             $stmt->bind_param("sssii", $this->params['name'], $this->params['surname'], $this->params['group'], $this->params['sum'], $this->params['pin']);
             $stmt->execute();
             //$query = "INSERT INTO users(name, surname, group, sum, pin) VALUES (".$this->params['name'] . "," . $this->params['surname'] . "," . $this->params['group'] . "," . $this->params['sum'] .",". $this->params['pin'] . ")";
-            $dbData = $stmt->get_result();
+            //$dbData = $stmt->get_result();
 
             if ($dbData != false) {
                 //$res = pg_fetch_assoc($dbData);
