@@ -46,7 +46,7 @@ class Users extends \Shared\Template
             ],
             'edit' => [
                 'id' => isset($data['id']) && (int) $data['id'] > 0 ? (int) $data['id'] : null,
-                'summ' => isset($data['summ']) && (int) $data['summ'] > 0 ? (int) $data['summ'] : null
+                'sum' => isset($data['sum']) && (int) $data['sum'] > 0 ? (int) $data['sum'] : null
             ],
             'delete' => [
                 'id' => isset($data['id']) && (int) $data['id'] > 0 ? (int) $data['id'] : null
