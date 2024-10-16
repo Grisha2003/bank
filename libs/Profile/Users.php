@@ -45,11 +45,11 @@ class Users extends \Shared\Template
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
             ],
             'edit' => [
-                'id' => isset($data['id']) && (int) $data['id'] > 0 ? (int) $data['id'] : null,
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
                 'sum' => isset($data['sum']) && (int) $data['sum'] > 0 ? (int) $data['sum'] : null
             ],
             'delete' => [
-                'id' => isset($data['id']) && (int) $data['id'] > 0 ? (int) $data['id'] : null
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
             ]
         ];
         return $params;
@@ -101,15 +101,35 @@ class Users extends \Shared\Template
 
     protected function delete() 
     {
-        
+        if ($this->status) {
+            $pin = $this->params['pin'];
+            $queryCheck = "SELECT * FROM users WHERE pin = $pin";
+            $dt = mysqli_query($this->db, $queryCheck);
+            $resCheck = mysqli_fetch_assoc($dt);
+            if (!empty($resCheck)) {
+                $query = "DELETE FROM users WHERE pin = $pin";
+                $dbData = mysqli_query($this->db, $query);
+
+                if ($dbData != false) {
+                    $this->outData = ['data' => 'ok'];
+                } else {
+                    $this->status = false;
+                    $this->error = ['error' => 'Ошибка запроса в бд'];
+                }
+            } else {
+                $this->status = false;
+                $this->error = ['error' => 'Пин-код не найден'];
+            }
+            
+        }
     }
 
     protected function edit() 
     {
         if ($this->status) {
-            $id = $this->params['id'];
+            $pin = $this->params['pin'];
             $sum = $this->params['sum'];
-            $query = "UPDATE users SET sum = $sum WHERE id = $id";
+            $query = "UPDATE users SET sum = $sum WHERE pin = $pin";
             $dbData = mysqli_query($this->db, $query);
             
             if ($dbData != false) {
@@ -123,7 +143,8 @@ class Users extends \Shared\Template
 
     private function validateCreate($data) 
     {
-        if (!isset($data['create']['pin'])) {
+        if (!isset($data['create']['pin'])
+                || $data['create']['pin'] > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры.'];
         }
@@ -141,7 +162,8 @@ class Users extends \Shared\Template
 
     private function validateRead($data) 
     {
-        if (!isset($data['read']['pin'])) {
+        if (!isset($data['read']['pin']) 
+                || $data['read']['pin'] > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры.'];
         }
@@ -155,8 +177,9 @@ class Users extends \Shared\Template
 
     private function validateEdit($data) 
     {
-        if (!isset($data['edit']['id'])
-                || !isset($data['edit']['sum'])) {
+        if (!isset($data['edit']['pin'])
+                || !isset($data['edit']['sum'])
+                || $data['edit']['pin'] > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры'];
         }
@@ -164,21 +187,22 @@ class Users extends \Shared\Template
         if ($this->status) {
             $this->params = [
                 'sum' => $data['edit']['sum'],
-                'id' => $data['edit']['id']
+                'pin' => $data['edit']['pin']
             ];
         }
     }
 
     private function validateDelete($data) 
     {
-        if (!isset($data['delete']['id'])) {
+        if (!isset($data['delete']['pin'])
+                || $data['delete']['pin'] > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры'];
         }
         
         if ($this->status) {
             $this->params = [
-                'id' => $data['delete']['id']
+                'pin' => $data['delete']['pin']
             ];
         }
     }
