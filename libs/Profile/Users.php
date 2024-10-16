@@ -79,15 +79,21 @@ class Users extends \Shared\Template
             $group = $this->params['group'];
             $sum = $this->params['sum'];
             $pin = $this->params['pin'];
-            $query = "INSERT INTO users(name, surname, `group`, sum, pin) VALUES ('$name', '$surname', '$group', $sum, $pin)";
-            $dbData = mysqli_query($this->db, $query);
+            $queryCheck = "SELECT 1 FROM users WHERE pin = $pin";
+            $resCheck = mysqli_query($this->db, $queryCheck);
+            if (!$resCheck) {
+                $query = "INSERT INTO users(name, surname, `group`, sum, pin) VALUES ('$name', '$surname', '$group', $sum, $pin)";
+                $dbData = mysqli_query($this->db, $query);
 
-            if ($dbData != false) {
-                $this->outData = ['answer' => 'ok'];
-                
+                if ($dbData != false) {
+                    $this->outData = ['answer' => 'ok'];
+                } else {
+                    $this->status = false;
+                    $this->error = ['error' => 'Ошибка запроса в бд'];
+                }
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Ошибка запроса в бд'];
+                $this->error = ['error' => 'Пин-код уже занят'];
             }
         }
     }
