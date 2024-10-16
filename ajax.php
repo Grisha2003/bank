@@ -17,10 +17,10 @@ $data = $rest->getData();
 
 
 
-function dbConn($settings)
+function dbConn()
 {
-    $connectDB = pg_connect("host={$settings['host']} port={$settings['port']} dbname={$settings['base']} user={$settings['user']} password={$settings['password']}");
-    
+    $connectDB = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=vovazero123");
+    return $connectDB;
 }
 
 if ($data['status'] && empty($data['error'])) {
@@ -31,7 +31,8 @@ if ($data['status'] && empty($data['error'])) {
         $namespace = $data['namespace'];
         $class = $data['class'];
         $obj = '\\' . $namespace . '\\' . $class;
-        $object = new $obj();
+        $db = dbConn();
+        $object = new $obj($data['method'], $db);
         $outData = $object->execute($data['params']);
     } else {
         $outData = '404';
