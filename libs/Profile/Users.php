@@ -79,9 +79,10 @@ class Users extends \Shared\Template
             $group = $this->params['group'];
             $sum = $this->params['sum'];
             $pin = $this->params['pin'];
-            $queryCheck = "SELECT 1 FROM users WHERE pin = $pin";
-            $resCheck = mysqli_query($this->db, $queryCheck);
-            if (!$resCheck) {
+            $queryCheck = "SELECT * FROM users WHERE pin = $pin";
+            $dt = mysqli_query($this->db, $queryCheck);
+            $resCheck = mysqli_fetch_assoc($dt);
+            if (empty($resCheck)) {
                 $query = "INSERT INTO users(name, surname, `group`, sum, pin) VALUES ('$name', '$surname', '$group', $sum, $pin)";
                 $dbData = mysqli_query($this->db, $query);
 
