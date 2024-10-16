@@ -63,7 +63,7 @@ class Users extends \Shared\Template
             $dbData = mysqli_query($this->db, $query);
             if ($dbData != false) {
                 $res = mysqli_fetch_assoc($dbData);
-                $this->outData = ['answer' => $res];
+                $this->outData = ['data' => $res];
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибак запроса в бд'];
@@ -87,7 +87,7 @@ class Users extends \Shared\Template
                 $dbData = mysqli_query($this->db, $query);
 
                 if ($dbData != false) {
-                    $this->outData = ['answer' => 'ok'];
+                    $this->outData = ['data' => 'ok'];
                 } else {
                     $this->status = false;
                     $this->error = ['error' => 'Ошибка запроса в бд'];
@@ -113,7 +113,7 @@ class Users extends \Shared\Template
             $dbData = mysqli_query($this->db, $query);
             
             if ($dbData != false) {
-               $this->outData = ['answer' => 'ok'];
+               $this->outData = ['data' => 'ok'];
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибка запроса в бд'];
