@@ -73,8 +73,11 @@ class Users extends \Shared\Template
     protected function create() 
     {
         if ($this->status) {
-            $query = "INSERT INTO users(name, surname, group, sum, pin) VALUES (".$this->params['name']."," . $this->params['surname'] . "," .$this->params['group'] . ",". $this->params['sum'] .",". $this->params['pin'] . ")";
-            $dbData = mysqli_query($this->db, $query);
+            $stmt = $this->db->prepare("INSERT INTO users(name, surname, group, sum, pin) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssii", $this->params['name'], $this->params['surname'], $this->params['group'], $this->params['sum'], $this->params['pin']);
+            $stmt->execute();
+            //$query = "INSERT INTO users(name, surname, group, sum, pin) VALUES (".$this->params['name'] . "," . $this->params['surname'] . "," . $this->params['group'] . "," . $this->params['sum'] .",". $this->params['pin'] . ")";
+            $dbData = $stmt->get_result();
 
             if ($dbData != false) {
                 //$res = pg_fetch_assoc($dbData);
