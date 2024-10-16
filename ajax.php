@@ -33,7 +33,7 @@ if ($data['status'] && empty($data['error'])) {
         $namespace = $data['namespace'];
         $class = $data['class'];
         $obj = '\\' . $namespace . '\\' . $class;
-        $db = dbConn('localhost', 'p-345076_base', 'vovazero123', 'p-345076_base');
+        $db = dbConn('localhost:3306', 'p-345076_base', 'vovazero123', 'p-345076_base');
         $object = new $obj($data['method'], $db);
         $outData = $object->execute($data['params']);
     } else {
