@@ -49,7 +49,7 @@ class Rest {
                 break;
             default:
                 $this->status = false;
-                $this->error = 'Неверный вид запроса.';
+                $this->error = ['error' => 'Неверный вид запроса.'];
         }
         return $retMethod;
     }
@@ -77,11 +77,11 @@ class Rest {
                         break;
                     default :
                         $this->status = false;
-                        $this->error = 'Неверный вид запроса.';
+                        $this->error = ['error' => 'Неверный вид запроса.'];
                 }
             } else {
                 $this->status = false;
-                $this->error = 'Пустая строка URL';
+                $this->error = ['error' => 'Пустая строка URL'];
             }
         }
         return $retData;
@@ -97,7 +97,7 @@ class Rest {
             }
         } else {
             $this->status = false;
-            $this->error = 'Тип параметров неверный.';
+            $this->error = ['error' => 'Тип параметров неверный.'];
         }
         return $this->status ? $params : null;
     }
@@ -107,7 +107,7 @@ class Rest {
         $postData = json_decode(file_get_contents("php://input"), true);
         if (!is_array($postData)) {
             $this->status = false;
-            $this->error = 'Ошибка json.';
+            $this->error = ['error' => 'Ошибка json.'];
         }
         
         return $this->status ? $postData : null;
@@ -122,7 +122,7 @@ class Rest {
                 $retNamespace = ucfirst($arrUrl[1]);
             } else {
                 $this->status = false;
-                $this->error = 'Неверный url.(namespace)';
+                $this->error = ['error' => 'Неверный url.(namespace)'];
             }
         }
         return $retNamespace;
@@ -137,10 +137,10 @@ class Rest {
                 $retClass = ucfirst($arrUrl[2]);
             } else {
                 $this->status = false;
-                $this->error = 'Неверный url.(class)';
+                $this->error = ['error' => 'Неверный url.(class)'];
             } 
         }
-        return $retClass;
+        return strtok($retClass, '?');
     }
     
     public function getData()

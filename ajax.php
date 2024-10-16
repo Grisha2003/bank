@@ -8,7 +8,8 @@ header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 header('Content-Security-Policy: default-src \'self\'');
 
-$serverData = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
+//$serverData = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
+$serverData = $_SERVER;
 
 global $outData;
 
@@ -26,7 +27,8 @@ function dbConn()
 if ($data['status'] && empty($data['error'])) {
     $namespace = $data['namespace'];
     $class = $data['class'];
-    $file = __DIR__ . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . $namespace . DIRECTORY_SEPARATOR . $class;
+    $file = __DIR__ . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . $namespace . DIRECTORY_SEPARATOR . $class . '.php';
+    
     if (file_exists($file)) {
         $namespace = $data['namespace'];
         $class = $data['class'];
@@ -35,12 +37,13 @@ if ($data['status'] && empty($data['error'])) {
         $object = new $obj($data['method'], $db);
         $outData = $object->execute($data['params']);
     } else {
-        $outData = '404';
+        $outData = ['error' => '404'];
+      //  $outData = $file;
     }
 } else {
     $outData = $data['error'];
 }
-echo htmlspecialchars($outData, ENT_QUOTES, 'UTF-8');
+echo json_encode($outData);
 
 
 //

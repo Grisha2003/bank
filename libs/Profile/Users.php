@@ -27,7 +27,7 @@ class Users extends \Shared\Template
                 break;
             default :
                 $this->status = false;
-                $this->error = 'Неверный метод.';
+                $this->error = ['error'=>'Неверный метод.'];
                 
         }
     }
@@ -39,6 +39,9 @@ class Users extends \Shared\Template
                 'name'=> isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
                 'surname' => isset($data['surname']) && $data['surname'] != '' ? $data['surname'] : null,
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
+            ],
+            'read' => [
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
             ]
         ];
         return $params;
@@ -46,21 +49,32 @@ class Users extends \Shared\Template
     
     protected function read()
     {
-        return;
+        if ($this->status) {
+            $query = "SELECT * FROM users WHERE pin = $1";
+            $dbData = pg_query_params($this->db, $query, $this->params);
+            if ($dbData != false) {
+                $res = pg_fetch_assoc($dbData);
+                $this->outData = ['answer'=>$res];
+            } else {
+                $this->status = false;
+                $this->error = ['error' => 'Ошибак запроса в бд'];
+            }
+        }
     }
     
     protected function create()
     {
-        $retArr = [];
-        $query = "INSERT INTO users(name, surname, pin) VALUES ($1, $2, $3)";
-        $dbData = pg_query_params($this->db, $query, $this->params);
-        
-        if ($dbData != false) {
-            $res = pg_fetch_assoc($dbData);
-            $this->outData = $res;
-        } else {
-            $this->status = false;
-            $this->error = 'Ошибка запроса в бд';
+        if ($this->status) {
+            $query = "INSERT INTO users(name, surname, pin) VALUES ($1, $2, $3)";
+            $dbData = pg_query_params($this->db, $query, $this->params);
+
+            if ($dbData != false) {
+                //$res = pg_fetch_assoc($dbData);
+                $this->outData = ['answer' => 'Ок'];
+            } else {
+                $this->status = false;
+                $this->error = ['error' => 'Ошибка запроса в бд'];
+            } 
         }
     }
     
@@ -78,21 +92,30 @@ class Users extends \Shared\Template
     {
         if (!isset($data['create']['pin'])) {
             $this->status = false;
-            $this->error = 'Неверные параметры.';
+            $this->error = ['error' => 'Неверные параметры.'];
         }
         
         if ($this->status) {
             $this->params = [
-                $data['name'],
-                $data['surname'],
-                $data['pin']
+                $data['create']['name'],
+                $data['create']['surname'],
+                $data['create']['pin']
             ];
         }
     }
     
     private function validateRead($data)
     {
+        if (!isset($data['read']['pin'])) {
+            $this->status = false;
+            $this->error = ['error' => 'Неверные параметры.'];
+        }
         
+        if ($this->status) {
+            $this->params = [
+                $data['read']['pin']
+            ];
+        }
     }
     
     private function validateEdit($data)
