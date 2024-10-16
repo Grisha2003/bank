@@ -32,7 +32,7 @@ if ($data['status'] && empty($data['error'])) {
         $class = $data['class'];
         $obj = '\\' . $namespace . '\\' . $class;
         try {
-            $db = dbConn('localhost:3306', 'p-345076_base', 'vovazero123', 'p-345076_base');
+            $db = dbConn('localhost:3306', 'p-345076_user', 'vovazero123', 'p-345076_base');
             $object = new $obj($data['method'], $db);
             $outData = $object->execute($data['params']);
         } catch(Exception $e) {
