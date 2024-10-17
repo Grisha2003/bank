@@ -142,7 +142,12 @@ class Users extends \Shared\Template {
                 break;
             case 'minus':
                 if (!empty($sumArr)) {
-                    $sumMain = (int) $sumArr['sum'] - $sum;
+                    if ($sum < $sumArr['sum']) {
+                        $sumMain = (int) $sumArr['sum'] - $sum;
+                    } else {
+                        $this->status = false;
+                        $this->error = ['error' => 'Недостаточно средств'];
+                    }
                 } else {
                     $this->status = false;
                     $this->error = ['error' => 'Пин-код не найден'];
