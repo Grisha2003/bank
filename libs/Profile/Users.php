@@ -210,7 +210,7 @@ class Users extends \Shared\Template
                 || empty($data['edit']['pin'])
 		|| mb_strlen((string)$data['edit']['pin']) > 4) {
             $this->status = false;
-            $this->error = ['error' => 'Неверные параметры'];
+            $this->error = ['error' => $data['edit']['pin']];
         }
         
         if ($this->status) {
