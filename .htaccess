@@ -11,6 +11,13 @@ AddDefaultCharset UTF-8
 # Включаем модуль переписывания URL
 RewriteEngine On
 
+#Ошибка CORS
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE, PUT"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
 # Правило для всех запросов, направленных на фронт
 # Все запросы перенаправляются на ajax.php
 RewriteCond %{REQUEST_FILENAME} !-f
