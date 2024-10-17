@@ -183,7 +183,7 @@ class Users extends \Shared\Template {
     private function validateRead($data) {
         if (!isset($data['read']['pin']) || mb_strlen((string) $data['read']['pin']) > 4) {
             $this->status = false;
-            $this->error = ['error' => $data['read']['pin']];
+            $this->error = ['error' => 'Неверные параметры'];
         }
 
         if ($this->status) {
