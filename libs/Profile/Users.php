@@ -172,11 +172,11 @@ class Users extends \Shared\Template
 
     private function validateCreate($data) 
     {
-        if (!isset($data['create']['pin'])
-		   || mb_strlen((string)$data['create']['pin']) > 4) {
-            $this->status = false;
-            $this->error = ['error' => 'Неверные параметры.'];
-        }
+//        if (!isset($data['create']['pin'])
+//		   || mb_strlen((string)$data['create']['pin']) > 4) {
+//            $this->status = false;
+//            $this->error = ['error' => 'Неверные параметры.'];
+//        }
 
         if ($this->status) {
             $this->params = [
