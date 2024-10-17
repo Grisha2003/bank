@@ -46,7 +46,8 @@ class Users extends \Shared\Template
             ],
             'edit' => [
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
-                'sum' => isset($data['sum']) && (int) $data['sum'] > 0 ? (int) $data['sum'] : null
+                'sum' => isset($data['sum']) && (int) $data['sum'] > 0 ? (int) $data['sum'] : null,
+                'type' => isset($data['type']) && $data['type'] != '' ? $data['type'] : null,
             ],
             'delete' => [
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
@@ -131,10 +132,33 @@ class Users extends \Shared\Template
 
     protected function edit() 
     {
+        $sumMain = null;
+        $sum = $this->params['sum'];
+        $pin = $this->params['pin'];
+        $selQuery = "SELECT sum FROM users WHERE pin = $pin";
+        $sumDb = mysqli_query($this->db, $selQuery);
+        $sumArr = mysqli_fetch_assoc($sumDb);
+        switch ($this->params['type']) {
+            case 'plus':
+                if (!empty($sumArr)) {
+                    $sumMain = (int) $sumArr['sum'] + $sum;
+                } else {
+                    $this->status = false;
+                    $this->error = ['error' => 'Пин-код не найден'];
+                }
+                break;
+            case 'minus':
+                if (!empty($sumArr)) {
+                    $sumMain = (int) $sumArr['sum'] - $sum;
+                } else {
+                    $this->status = false;
+                    $this->error = ['error' => 'Пин-код не найден'];
+                }
+                break;
+        }
+        
         if ($this->status) {
-            $pin = $this->params['pin'];
-            $sum = $this->params['sum'];
-            $query = "UPDATE users SET sum = $sum WHERE pin = $pin";
+            $query = "UPDATE users SET sum = $sumMain WHERE pin = $pin";
             $dbData = mysqli_query($this->db, $query);
             
             if ($dbData != false) {
@@ -192,7 +216,8 @@ class Users extends \Shared\Template
         if ($this->status) {
             $this->params = [
                 'sum' => $data['edit']['sum'],
-                'pin' => $data['edit']['pin']
+                'pin' => $data['edit']['pin'],
+                'type' => $data['edit']['type']
             ];
         }
     }
