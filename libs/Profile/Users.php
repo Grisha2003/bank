@@ -36,8 +36,8 @@ class Users extends \Shared\Template {
                 'name' => isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
                 'surname' => isset($data['surname']) && $data['surname'] != '' ? $data['surname'] : null,
                 'group' => isset($data['group']) && $data['group'] != '' ? $data['group'] : null,
-                'sum' => is_int($data['pin']) && $data['pin'] >= 0 ? (int) $data['sum'] : null,
-                'pin' => is_int($data['pin']) && $data['pin'] >= 0 ? (int) $data['pin'] : null
+                'sum' => $data['pin'] >= 0 ? (int) $data['sum'] : null,
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
             ],
             'read' => [
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
