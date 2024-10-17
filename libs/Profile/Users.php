@@ -7,8 +7,7 @@ namespace Profile;
  *
  * @author vladimir
  */
-class Users extends \Shared\Template 
-{
+class Users extends \Shared\Template {
 
     protected function validate() {
         $data = $this->prepareData($this->inData);
@@ -31,8 +30,7 @@ class Users extends \Shared\Template
         }
     }
 
-    private function prepareData($data) 
-    {
+    private function prepareData($data) {
         $params = [
             'create' => [
                 'name' => isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
@@ -56,20 +54,19 @@ class Users extends \Shared\Template
         return $params;
     }
 
-    protected function read() 
-    {
+    protected function read() {
         if ($this->status) {
             $pin = $this->params['pin'];
             $query = "SELECT * FROM users WHERE pin = $pin";
             $dbData = mysqli_query($this->db, $query);
             if ($dbData != false) {
                 $res = mysqli_fetch_assoc($dbData);
-				if (!empty($res)) {
-                	$this->outData = ['data' => $res];
-				} else {
-					$this->status = false;
-                	$this->error = ['error' => 'Пин-код не найден'];	
-				}
+                if (!empty($res)) {
+                    $this->outData = ['data' => $res];
+                } else {
+                    $this->status = false;
+                    $this->error = ['error' => 'Пин-код не найден'];
+                }
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибак запроса в бд'];
@@ -77,8 +74,7 @@ class Users extends \Shared\Template
         }
     }
 
-    protected function create() 
-    {
+    protected function create() {
         if ($this->status) {
             $name = $this->params['name'];
             $surname = $this->params['surname'];
@@ -105,8 +101,7 @@ class Users extends \Shared\Template
         }
     }
 
-    protected function delete() 
-    {
+    protected function delete() {
         if ($this->status) {
             $pin = $this->params['pin'];
             $queryCheck = "SELECT * FROM users WHERE pin = $pin";
@@ -126,12 +121,10 @@ class Users extends \Shared\Template
                 $this->status = false;
                 $this->error = ['error' => 'Пин-код не найден'];
             }
-            
         }
     }
 
-    protected function edit() 
-    {
+    protected function edit() {
         $sumMain = null;
         $sum = $this->params['sum'];
         $pin = $this->params['pin'];
@@ -156,13 +149,13 @@ class Users extends \Shared\Template
                 }
                 break;
         }
-        
+
         if ($this->status) {
             $query = "UPDATE users SET sum = $sumMain WHERE pin = $pin";
             $dbData = mysqli_query($this->db, $query);
-            
+
             if ($dbData != false) {
-               $this->outData = ['data' => 'ok'];
+                $this->outData = ['data' => 'ok'];
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Ошибка запроса в бд'];
@@ -170,10 +163,8 @@ class Users extends \Shared\Template
         }
     }
 
-    private function validateCreate($data) 
-    {
-        if (!isset($data['create']['pin'])
-		   || mb_strlen((string)$data['create']['pin']) > 4) {
+    private function validateCreate($data) {
+        if (!isset($data['create']['pin']) || mb_strlen((string) $data['create']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры.'];
         }
@@ -189,12 +180,10 @@ class Users extends \Shared\Template
         }
     }
 
-    private function validateRead($data) 
-    {
-        if (!isset($data['read']['pin']) 
-                || mb_strlen((string)$data['read']['pin']) > 4) {
+    private function validateRead($data) {
+        if (!isset($data['read']['pin']) || mb_strlen((string) $data['read']['pin']) > 4) {
             $this->status = false;
-            $this->error = ['error' => 'Неверные параметры.'];
+            $this->error = ['error' => $data['read']['pin']];
         }
 
         if ($this->status) {
@@ -204,15 +193,12 @@ class Users extends \Shared\Template
         }
     }
 
-    private function validateEdit($data) 
-    {
-        if (!isset($data['edit']['pin']) 
-                || empty($data['edit']['pin'])
-		|| mb_strlen((string)$data['edit']['pin']) > 4) {
+    private function validateEdit($data) {
+        if (!isset($data['edit']['pin']) || empty($data['edit']['pin']) || mb_strlen((string) $data['edit']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неправильные параметры'];
         }
-        
+
         if ($this->status) {
             $this->params = [
                 'sum' => $data['edit']['sum'],
@@ -222,14 +208,12 @@ class Users extends \Shared\Template
         }
     }
 
-    private function validateDelete($data) 
-    {
-        if (!isset($data['delete']['pin'])
-                || mb_strlen((string)$data['delete']['pin']) > 4) {
+    private function validateDelete($data) {
+        if (!isset($data['delete']['pin']) || mb_strlen((string) $data['delete']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры'];
         }
-        
+
         if ($this->status) {
             $this->params = [
                 'pin' => $data['delete']['pin']
