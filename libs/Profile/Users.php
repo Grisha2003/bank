@@ -207,8 +207,7 @@ class Users extends \Shared\Template
     private function validateEdit($data) 
     {
         if (!isset($data['edit']['pin'])
-                || !isset($data['edit']['sum'])
-                || mb_strlen((string)$data['edit']['pin']) > 4) {
+		   || mb_strlen((string)$data['edit']['pin']) > 4) {
             $this->status = false;
             $this->error = ['error' => 'Неверные параметры'];
         }
