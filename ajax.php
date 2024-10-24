@@ -13,7 +13,7 @@ session_start();
 $serverData = $_SERVER;
 
 global $outData;
-
+echo $serverData;
 $rest = new \Shared\Rest($serverData);
 $data = $rest->getData();
 
