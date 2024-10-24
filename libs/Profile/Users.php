@@ -214,16 +214,30 @@ class Users extends \Shared\Template {
     }
 
     private function validateRead($data) {
-        if (!isset($data['read']['pin']) || mb_strlen((string) $data['read']['pin']) > 4 || !isset($data['read']['type'])) {
-            $this->status = false;
-            $this->error = ['error' => 'Неверные параметры'];
-        }
+        switch ($data['read']['type']) {
+            case 'read':
+                if (!isset($data['read']['pin']) || mb_strlen((string) $data['read']['pin']) > 4) {
+                    $this->status = false;
+                    $this->error = ['error' => 'Неверные параметры'];
+                }
 
-        if ($this->status) {
-            $this->params = [
-                'pin' => $data['read']['pin'],
-                'type' => $data['read']['type']
-            ];
+                if ($this->status) {
+                    $this->params = [
+                        'pin' => $data['read']['pin'],
+                        'type' => $data['read']['type']
+                    ];
+                }
+                break;
+            case 'list':
+                if ($this->status) {
+                    $this->params = [
+                        'type' => $data['read']['type']
+                    ];
+                }
+                break;
+            default: 
+                $this->status = false;
+                $this->error = ['error' => 'Неверное значение type'];
         }
     }
 
