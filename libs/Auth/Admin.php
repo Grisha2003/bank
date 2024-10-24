@@ -71,21 +71,26 @@ class Admin extends \Shared\Template {
 
         $queryCheck = "SELECT id FROM admin WHERE hash = $strForHash";
         $dt = mysqli_query($this->db, $queryCheck);
-        $resCheck = mysqli_fetch_assoc($dt);
-        if (empty($resCheck)) {
-            $query = "INSERT INTO admin(hash) VALUES ('$strForHash')";
-            $dbData = mysqli_query($this->db, $query);
+        if ($dt !== false) {
+            $resCheck = mysqli_fetch_assoc($dt);
+            if (empty($resCheck)) {
+                $query = "INSERT INTO admin(hash) VALUES ('$strForHash')";
+                $dbData = mysqli_query($this->db, $query);
 
-            if ($dbData != false) {
-                $_SESSION['token'] = $strForHash;
-                $this->outData = ['data' => 'ok'];
+                if ($dbData != false) {
+                    $_SESSION['token'] = $strForHash;
+                    $this->outData = ['data' => 'ok'];
+                } else {
+                    $this->status = false;
+                    $this->error = ['error' => 'Ошибка запроса в бд'];
+                }
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Ошибка запроса в бд'];
+                $this->error = ['error' => 'Пользователь уже добавлен'];
             }
         } else {
             $this->status = false;
-            $this->error = ['error' => 'Пользователь уже добавлен'];
+            $this->error = ['error' => 'Ошибка бд'];
         }
     }
 
