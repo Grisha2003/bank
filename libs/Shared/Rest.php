@@ -34,6 +34,7 @@ class Rest {
     {
         $retMethod = null;
         $method = $this->request['REQUEST_METHOD'];
+        echo $method;
         switch ($method) {
             case 'GET':
                 $retMethod = 'read';
