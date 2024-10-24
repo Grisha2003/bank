@@ -91,7 +91,8 @@ class Admin extends \Shared\Template {
             }
         } else {
             $this->status = false;
-            $this->error = ['error' => 'Ошибка бд'];
+            //$this->error = ['error' => 'Ошибка бд'];
+            $this->error = ['error' => $strForHash];
         }
     }
 
