@@ -13,7 +13,7 @@ session_start();
 $serverData = $_SERVER;
 
 global $outData;
-echo json_encode($serverData);
+//echo json_encode($serverData);
 $rest = new \Shared\Rest($serverData);
 $data = $rest->getData();
 
