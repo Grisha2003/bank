@@ -68,7 +68,7 @@ class Admin extends \Shared\Template {
         $login = is_string($this->params['login']) ? $this->params['login'] : '';
 
         //$strForHash = md5($password . ':' . $login);
-        $strForHash = '123123123';//md5($password . ':' . $login);
+        $strForHash = '12312312';//md5($password . ':' . $login);
 
         $queryCheck = "SELECT id FROM `admin` WHERE hash = $strForHash";
         $dt = mysqli_query($this->db, $queryCheck);
