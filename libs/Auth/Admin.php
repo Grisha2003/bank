@@ -67,7 +67,7 @@ class Admin extends \Shared\Template {
         $password = is_string($this->params['password']) ? $this->params['password'] : '';
         $login = is_string($this->params['login']) ? $this->params['login'] : '';
 
-        $strForHash = md5($password . ':' . $login);
+        $strForHash = base64_encode($password . ':' . $login);
         //$strForHash = '12312312';//md5($password . ':' . $login);
 
         $queryCheck = "SELECT id FROM `admin` WHERE hash = $strForHash";
