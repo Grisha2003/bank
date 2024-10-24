@@ -68,7 +68,7 @@ class Admin extends \Shared\Template {
         $login = is_string($this->params['login']) ? $this->params['login'] : '';
 
         //$strForHash = md5($password . $login);
-        $strForHash = md5($password);
+        $strForHash = md5($password . ':' . $login);
         //$strForHash = '12312312';//md5($password . ':' . $login);
 
         $queryCheck = "SELECT id FROM `admin` WHERE hash = '$strForHash'";
@@ -92,8 +92,8 @@ class Admin extends \Shared\Template {
             }
         } else {
             $this->status = false;
-            //$this->error = ['error' => 'Ошибка бд'];
-            $this->error = ['error' => $strForHash];
+            $this->error = ['error' => 'Ошибка бд'];
+           // $this->error = ['error' => $strForHash];
         }
     }
 
