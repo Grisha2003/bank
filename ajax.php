@@ -30,8 +30,8 @@ if ($data['status'] && empty($data['error'])) {
     if (file_exists($file)) {
         $namespace = $data['namespace'];
         $class = $data['class'];
-        $obj = strip_tags('\\' . $namespace . '\\' . $class);
-//        echo $obj . "  ";
+        $obj = '\\' . $namespace . '\\' . $class;
+
         try {
             $db = dbConn('localhost:3306', 'p-345076_user', 'vovazero123', 'p-345076_base');
             $object = new $obj($data['method'], $db);
