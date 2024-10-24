@@ -134,7 +134,7 @@ class Rest {
         if ($this->status) {
             $arrUrl = explode('/', $this->url);
             if (isset($arrUrl[2])) {
-                $retClass = ucfirst($arrUrl[2]);
+                $retClass = ucfirst(strip_tags($arrUrl[2]));
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'Неверный url.(class)'];
