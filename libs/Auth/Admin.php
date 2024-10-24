@@ -71,7 +71,7 @@ class Admin extends \Shared\Template {
         $strForHash = md5($password);
         //$strForHash = '12312312';//md5($password . ':' . $login);
 
-        $queryCheck = "SELECT id FROM `admin` WHERE hash = $strForHash";
+        $queryCheck = "SELECT id FROM `admin` WHERE hash = '$strForHash'";
         $dt = mysqli_query($this->db, $queryCheck);
         if ($dt !== false) {
             $resCheck = mysqli_fetch_assoc($dt);
@@ -108,7 +108,7 @@ class Admin extends \Shared\Template {
         }
 
 
-        $query = "SELECT id FROM admin WHERE hash = $strForHash";
+        $query = "SELECT id FROM admin WHERE hash = '$strForHash'";
         $dbData = mysqli_query($this->db, $query);
 
         if ($dbData != false) {
