@@ -12,7 +12,7 @@ namespace Admin;
  *
  * @author vladimir
  */
-class Admin extends Shared\Template {
+class Admin extends \Shared\Template {
 
     protected function validate() {
         $data = $this->prepareData($this->inData);
