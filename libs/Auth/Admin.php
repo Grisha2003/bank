@@ -22,8 +22,8 @@ class Admin extends \Shared\Template {
                 break;
             default:
                 $this->status = false;
-                //$this->error = ['error' => 'Неверный метод.'];
-                $this->error = ['error' => $this->method];
+                $this->error = ['error' => 'Неверный метод.'];
+               // $this->error = ['error' => $this->method];
         }
     }
 
