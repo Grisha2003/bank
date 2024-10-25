@@ -87,7 +87,7 @@ class Users extends \Shared\Template {
     }
 
     private function typeList() {
-        $query = "SELECT * FROM users BY DESC";
+        $query = "SELECT * FROM users ORDER BY DESC";
         $dbData = mysqli_query($this->db, $query);
         if ($dbData != false) {
             $res = mysqli_fetch_all($dbData);
