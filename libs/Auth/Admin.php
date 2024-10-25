@@ -58,9 +58,9 @@ class Admin extends \Shared\Template {
         $dbData = mysqli_query($this->db, $query);
         
         if ($dbData != false) {
-            $res = mysqli_fetch_assoc($dbData);
+            $res = mysqli_fetch_assoc($dbData, true);
             if (!empty($res)) {
-                $this->outData = ['data' => $dbData];
+                $this->outData = ['data' => $res];
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'База данных пуста'];
