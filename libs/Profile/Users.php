@@ -154,7 +154,8 @@ class Users extends \Shared\Template {
                 }
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+                //$this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+                $this->error = ['error' => $this->params['token']];
             }
         }
     }
