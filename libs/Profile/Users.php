@@ -49,7 +49,8 @@ class Users extends \Shared\Template {
                 'type' => isset($data['type']) && $data['type'] != '' ? $data['type'] : null,
             ],
             'delete' => [
-                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
+                'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
             ]
         ];
         return $params;
@@ -132,25 +133,53 @@ class Users extends \Shared\Template {
 
     protected function delete() {
         if ($this->status) {
-            $pin = $this->params['pin'];
-            $queryCheck = "SELECT * FROM users WHERE pin = $pin";
-            $dt = mysqli_query($this->db, $queryCheck);
-            $resCheck = mysqli_fetch_assoc($dt);
-            if (!empty($resCheck)) {
-                $query = "DELETE FROM users WHERE pin = $pin";
-                $dbData = mysqli_query($this->db, $query);
+            if ($this->checkToken()) {
+                $pin = $this->params['pin'];
+                $queryCheck = "SELECT * FROM users WHERE pin = $pin";
+                $dt = mysqli_query($this->db, $queryCheck);
+                $resCheck = mysqli_fetch_assoc($dt);
+                if (!empty($resCheck)) {
+                    $query = "DELETE FROM users WHERE pin = $pin";
+                    $dbData = mysqli_query($this->db, $query);
 
-                if ($dbData != false) {
-                    $this->outData = ['data' => 'ok'];
+                    if ($dbData != false) {
+                        $this->outData = ['data' => 'ok'];
+                    } else {
+                        $this->status = false;
+                        $this->error = ['error' => 'Ошибка запроса в бд'];
+                    }
                 } else {
                     $this->status = false;
-                    $this->error = ['error' => 'Ошибка запроса в бд'];
+                    $this->error = ['error' => 'Пин-код не найден'];
                 }
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Пин-код не найден'];
+                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
             }
         }
+    }
+    
+    private function checkToken()
+    {
+        $ret = false;
+        $strForHash = is_string($this->params['token']) ? $this->params['token'] : '';
+        $query = "SELECT id FROM `admin` WHERE hash = '$strForHash'";
+        $dt = mysqli_query($this->db, $query);
+        if ($dt !== false) {
+            $resCheck = mysqli_fetch_assoc($dt);
+            if (!empty($resCheck)) {
+                $ret = true;
+            } else {
+                $this->status = false;
+                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+            }
+        } else {
+            $this->status = false;
+            $this->error = ['error' => 'Ошибка бд'];
+           // $this->error = ['error' => $strForHash];
+        }
+        
+        return $ret;
     }
 
     protected function edit() {
@@ -265,7 +294,8 @@ class Users extends \Shared\Template {
 
         if ($this->status) {
             $this->params = [
-                'pin' => $data['delete']['pin']
+                'pin' => $data['delete']['pin'],
+                'token' => $data['delete']['token']
             ];
         }
     }
