@@ -54,7 +54,7 @@ class Admin extends \Shared\Template {
     }
     protected function read() 
     {
-        $query = "SELECT * FROM users";
+        $query = "SELECT * FROM `users`";
         $dbData = mysqli_query($this->db, $query);
         if ($dbData != false) {
             $res = mysqli_fetch_assoc($dbData);
