@@ -61,8 +61,9 @@ class Users extends \Shared\Template {
                 case 'list':
                     $this->typeList();
                     break;
-                default:
+                case 'read':
                     $this->typeRead();
+                    break;
             }
         }
     }
