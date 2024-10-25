@@ -56,10 +56,11 @@ class Admin extends \Shared\Template {
     {
         $query = "SELECT * FROM `users`";
         $dbData = mysqli_query($this->db, $query);
+        
         if ($dbData != false) {
             $res = mysqli_fetch_assoc($dbData);
             if (!empty($res)) {
-                $this->outData = ['data' => $res];
+                $this->outData = ['data' => $dbData];
             } else {
                 $this->status = false;
                 $this->error = ['error' => 'База данных пуста'];
