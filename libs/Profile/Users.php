@@ -50,7 +50,7 @@ class Users extends \Shared\Template {
             ],
             'delete' => [
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
-                'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
+              //  'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
             ]
         ];
         return $params;
@@ -133,7 +133,7 @@ class Users extends \Shared\Template {
 
     protected function delete() {
         if ($this->status) {
-            if ($this->checkToken()) {
+            //if ($this->checkToken()) {
                 $pin = $this->params['pin'];
                 $queryCheck = "SELECT * FROM users WHERE pin = $pin";
                 $dt = mysqli_query($this->db, $queryCheck);
@@ -152,11 +152,11 @@ class Users extends \Shared\Template {
                     $this->status = false;
                     $this->error = ['error' => 'Пин-код не найден'];
                 }
-            } else {
-                $this->status = false;
-                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+            //} else {
+              //  $this->status = false;
+              //  $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
                 //$this->error = ['error' => $this->params['token']];
-            }
+            //}
         }
     }
     
@@ -296,7 +296,7 @@ class Users extends \Shared\Template {
         if ($this->status) {
             $this->params = [
                 'pin' => $data['delete']['pin'],
-                'token' => $data['delete']['token']
+               // 'token' => $data['delete']['token']
             ];
         }
     }
