@@ -20,6 +20,9 @@ class Admin extends \Shared\Template {
             case 'create':
                 $this->validateCreate($data);
                 break;
+            case 'read':
+                $this->validateRead($data);
+                break;
             default:
                 $this->status = false;
                 $this->error = ['error' => 'Неверный метод.'];
@@ -34,13 +37,37 @@ class Admin extends \Shared\Template {
                 'login' => isset($data['login']) && $data['login'] != '' ? $data['login'] : null,
                 'type' => isset($data['type']) && $data['type'] != '' ? $data['type'] : null,
             ],
+            'read' => [
+                'type' =>  isset($data['type']) && $data['type'] != '' ? $data['type'] : null,
+            ]
         ];
 
         return $params;
     }
 
-    protected function read() {
-        
+    
+    private function validateRead($params)
+    {
+        $this->params = [
+            $params['read']['type']
+        ];
+    }
+    protected function read() 
+    {
+        $query = "SELECT * FROM users";
+        $dbData = mysqli_query($this->db, $query);
+        if ($dbData != false) {
+            $res = mysqli_fetch_assoc($dbData);
+            if (!empty($res)) {
+                $this->outData = ['data' => $res];
+            } else {
+                $this->status = false;
+                $this->error = ['error' => 'База данных пуста'];
+            }
+        } else {
+            $this->status = false;
+            $this->error = ['error' => 'Ошибак запроса в бд'];
+        }
     }
 
     protected function edit() {
