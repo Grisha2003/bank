@@ -90,7 +90,7 @@ class Users extends \Shared\Template {
         $query = "SELECT * FROM users";
         $dbData = mysqli_query($this->db, $query);
         if ($dbData != false) {
-            $res = mysqli_fetch_assoc($dbData);
+            $res = mysqli_fetch_all($dbData);
             if (!empty($res)) {
                 $this->outData = ['data' => $res];
             } else {
