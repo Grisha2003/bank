@@ -31,7 +31,7 @@ class Users extends \Shared\Template {
     }
 
     private function prepareData($data) {
-        file_put_contents('res.txt', $data['token']);
+        file_put_contents('res.txt', $data);
         $params = [
             'create' => [
                 'name' => isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
