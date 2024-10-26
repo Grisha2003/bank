@@ -6,6 +6,8 @@
             <file>file:/C:/Apache/Apache24/htdocs/bankBack/ajax.php</file>
             <file>file:/C:/Apache/Apache24/htdocs/bankBack/libs/Auth/Admin.php</file>
             <file>file:/C:/Apache/Apache24/htdocs/bankBack/libs/Shared/Rest.php</file>
+            <file>file:/C:/Apache/Apache24/htdocs/bankBack/libs/Shared/Template.php</file>
+            <file>file:/C:/Apache/Apache24/htdocs/bankBack/test.php</file>
             <file>file:/C:/Apache/Apache24/htdocs/bankBack/libs/Profile/Users.php</file>
         </group>
     </open-files>

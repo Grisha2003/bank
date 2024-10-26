@@ -45,6 +45,7 @@ class Users extends \Shared\Template {
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
             ],
             'edit' => [
+                'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
                 'sum' => isset($data['sum']) && (int) $data['sum'] > 0 ? (int) $data['sum'] : null,
                 'type' => isset($data['type']) && $data['type'] != '' ? $data['type'] : null,
@@ -90,7 +91,7 @@ class Users extends \Shared\Template {
     }
 
     private function typeList() {
-        $query = "SELECT * FROM users";
+        $query = "SELECT * FROM users ORDER BY id DESC";
         $dbData = mysqli_query($this->db, $query);
         if ($dbData != false) {
             $res = mysqli_fetch_all($dbData);
@@ -186,46 +187,51 @@ class Users extends \Shared\Template {
     }
 
     protected function edit() {
-        $sumMain = null;
-        $sum = $this->params['sum'];
-        $pin = $this->params['pin'];
-        $selQuery = "SELECT sum FROM users WHERE pin = $pin";
-        $sumDb = mysqli_query($this->db, $selQuery);
-        $sumArr = mysqli_fetch_assoc($sumDb);
-        switch ($this->params['type']) {
-            case 'plus':
-                if (!empty($sumArr)) {
-                    $sumMain = (int) $sumArr['sum'] + $sum;
-                } else {
-                    $this->status = false;
-                    $this->error = ['error' => 'Пин-код не найден'];
-                }
-                break;
-            case 'minus':
-                if (!empty($sumArr)) {
-                    if ($sum < $sumArr['sum']) {
-                        $sumMain = (int) $sumArr['sum'] - $sum;
+        if ($this->checkToken()) {
+            $sumMain = null;
+            $sum = $this->params['sum'];
+            $pin = $this->params['pin'];
+            $selQuery = "SELECT sum FROM users WHERE pin = $pin";
+            $sumDb = mysqli_query($this->db, $selQuery);
+            $sumArr = mysqli_fetch_assoc($sumDb);
+            switch ($this->params['type']) {
+                case 'plus':
+                    if (!empty($sumArr)) {
+                        $sumMain = (int) $sumArr['sum'] + $sum;
                     } else {
                         $this->status = false;
-                        $this->error = ['error' => 'Недостаточно средств'];
+                        $this->error = ['error' => 'Пин-код не найден'];
                     }
+                    break;
+                case 'minus':
+                    if (!empty($sumArr)) {
+                        if ($sum < $sumArr['sum']) {
+                            $sumMain = (int) $sumArr['sum'] - $sum;
+                        } else {
+                            $this->status = false;
+                            $this->error = ['error' => 'Недостаточно средств'];
+                        }
+                    } else {
+                        $this->status = false;
+                        $this->error = ['error' => 'Пин-код не найден'];
+                    }
+                    break;
+            }
+
+            if ($this->status) {
+                $query = "UPDATE users SET sum = $sumMain WHERE pin = $pin";
+                $dbData = mysqli_query($this->db, $query);
+
+                if ($dbData != false) {
+                    $this->outData = ['data' => 'ok'];
                 } else {
                     $this->status = false;
-                    $this->error = ['error' => 'Пин-код не найден'];
+                    $this->error = ['error' => 'Ошибка запроса в бд'];
                 }
-                break;
-        }
-
-        if ($this->status) {
-            $query = "UPDATE users SET sum = $sumMain WHERE pin = $pin";
-            $dbData = mysqli_query($this->db, $query);
-
-            if ($dbData != false) {
-                $this->outData = ['data' => 'ok'];
-            } else {
-                $this->status = false;
-                $this->error = ['error' => 'Ошибка запроса в бд'];
             }
+        } else {
+            $this->status = false;
+            $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
         }
     }
 
@@ -282,6 +288,7 @@ class Users extends \Shared\Template {
 
         if ($this->status) {
             $this->params = [
+                'token' => $data['edit']['token'],
                 'sum' => $data['edit']['sum'],
                 'pin' => $data['edit']['pin'],
                 'type' => $data['edit']['type']
