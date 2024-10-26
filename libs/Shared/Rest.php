@@ -74,7 +74,7 @@ class Rest {
                         $retData = $this->closeParamsProcessing();
                         break;
                     case 'DELETE':
-                        $retData = $this->openParamsProcessing($url);
+                        $retData = $this->closeParamsProcessing($url);
                         break;
                     default :
                         $this->status = false;
