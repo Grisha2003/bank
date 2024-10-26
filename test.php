@@ -1,10 +1,8 @@
 <?php
-$name = 'hell';
-$date = 'z';
-$cde = null;
-
-if (!isset($name) || (isset($date) && isset($cde))) {
-    print_r("erro");
+$password=$argv[1];
+$trpassword="grisha";
+if ($password==$trpassword){
+    echo "пороль верный";
 } else {
-    print_r("JJJJ");
-}
+    echo "пароль не верный";
+} 
