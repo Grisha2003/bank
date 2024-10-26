@@ -50,8 +50,8 @@ class Users extends \Shared\Template {
             ],
             'delete' => [
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
-                //'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
-                'token' => $data['token']
+                'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
+                //'token' => $data['token']
             ]
         ];
         return $params;
