@@ -31,6 +31,7 @@ class Users extends \Shared\Template {
     }
 
     private function prepareData($data) {
+        file_put_contents('res.txt', $data);
         $params = [
             'create' => [
                 'name' => isset($data['name']) && $data['name'] != '' ? $data['name'] : null,
@@ -173,7 +174,7 @@ class Users extends \Shared\Template {
                 $ret = true;
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Вы не можете выплднять данное действие.!'];
+                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
             }
         } else {
             $this->status = false;
