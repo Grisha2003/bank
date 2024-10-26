@@ -11,6 +11,7 @@ header('Content-Security-Policy: default-src \'self\'');
 
 session_start();
 $serverData = $_SERVER;
+file_put_contents('test.txt', $serverData);
 
 global $outData;
 //echo json_encode($serverData);
