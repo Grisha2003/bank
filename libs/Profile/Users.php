@@ -50,7 +50,8 @@ class Users extends \Shared\Template {
             ],
             'delete' => [
                 'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
-                'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
+                //'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
+                'token' => $data['token']
             ]
         ];
         return $params;
@@ -172,7 +173,7 @@ class Users extends \Shared\Template {
                 $ret = true;
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+                $this->error = ['error' => 'Вы не можете выплднять данное действие.!'];
             }
         } else {
             $this->status = false;
