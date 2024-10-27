@@ -38,7 +38,8 @@ class Users extends \Shared\Template {
                 'surname' => isset($data['surname']) && $data['surname'] != '' ? $data['surname'] : null,
                 'group' => isset($data['group']) && $data['group'] != '' ? $data['group'] : null,
                 'sum' => isset($data['sum']) >= 0 && !empty($data['sum']) ? (int) $data['sum'] : null,
-                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null
+                'pin' => isset($data['pin']) && (int) $data['pin'] > 0 ? (int) $data['pin'] : null,
+                'token' => isset($data['token']) && $data['token'] != '' ? $data['token'] : null,
             ],
             'read' => [
                 'type' => isset($data['type']) && $data['type'] != '' ? $data['type'] : null,
@@ -109,27 +110,29 @@ class Users extends \Shared\Template {
 
     protected function create() {
         if ($this->status) {
-            $name = $this->params['name'];
-            $surname = $this->params['surname'];
-            $group = $this->params['group'];
-            $sum = $this->params['sum'];
-            $pin = $this->params['pin'];
-            $queryCheck = "SELECT * FROM users WHERE pin = $pin";
-            $dt = mysqli_query($this->db, $queryCheck);
-            $resCheck = mysqli_fetch_assoc($dt);
-            if (empty($resCheck)) {
-                $query = "INSERT INTO users(name, surname, `group`, sum, pin) VALUES ('$name', '$surname', '$group', $sum, $pin)";
-                $dbData = mysqli_query($this->db, $query);
+            if ($this->checkToken()) {
+                $name = $this->params['name'];
+                $surname = $this->params['surname'];
+                $group = $this->params['group'];
+                $sum = $this->params['sum'];
+                $pin = $this->params['pin'];
+                $queryCheck = "SELECT * FROM users WHERE pin = $pin";
+                $dt = mysqli_query($this->db, $queryCheck);
+                $resCheck = mysqli_fetch_assoc($dt);
+                if (empty($resCheck)) {
+                    $query = "INSERT INTO users(name, surname, `group`, sum, pin) VALUES ('$name', '$surname', '$group', $sum, $pin)";
+                    $dbData = mysqli_query($this->db, $query);
 
-                if ($dbData != false) {
-                    $this->outData = ['data' => 'ok'];
+                    if ($dbData != false) {
+                        $this->outData = ['data' => 'ok'];
+                    } else {
+                        $this->status = false;
+                        $this->error = ['error' => 'Ошибка запроса в бд'];
+                    }
                 } else {
                     $this->status = false;
-                    $this->error = ['error' => 'Ошибка запроса в бд'];
+                    $this->error = ['error' => 'Пин-код уже занят'];
                 }
-            } else {
-                $this->status = false;
-                $this->error = ['error' => 'Пин-код уже занят'];
             }
         }
     }
@@ -247,7 +250,8 @@ class Users extends \Shared\Template {
                 'surname' => $data['create']['surname'],
                 'pin' => $data['create']['pin'],
                 'sum' => $data['create']['sum'],
-                'group' => $data['create']['group']
+                'group' => $data['create']['group'],
+                'token' => $data['create']['token']
             ];
         }
     }
