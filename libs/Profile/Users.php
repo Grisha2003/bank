@@ -133,6 +133,9 @@ class Users extends \Shared\Template {
                     $this->status = false;
                     $this->error = ['error' => 'Пин-код уже занят'];
                 }
+            } else {
+                $this->status = false;
+                $this->error = ['error' => 'Вы не можете выполнять данное действие!'];
             }
         }
     }
@@ -160,7 +163,7 @@ class Users extends \Shared\Template {
                 }
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+                $this->error = ['error' => 'Вы не можете выполнять данное действие!'];
               //  $this->error = ['error' => $this->params['token']];
             }
         }
@@ -178,7 +181,7 @@ class Users extends \Shared\Template {
                 $ret = true;
             } else {
                 $this->status = false;
-                $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+                $this->error = ['error' => 'Вы не можете выполнять данное действие!'];
             }
         } else {
             $this->status = false;
@@ -234,7 +237,7 @@ class Users extends \Shared\Template {
             }
         } else {
             $this->status = false;
-            $this->error = ['error' => 'Вы не можете выплднять данное действие.'];
+            $this->error = ['error' => 'Вы не можете выполнять данное действие!'];
         }
     }
 
