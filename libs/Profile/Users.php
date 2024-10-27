@@ -288,7 +288,10 @@ class Users extends \Shared\Template {
     }
 
     private function validateEdit($data) {
-        if (!isset($data['edit']['pin']) || empty($data['edit']['pin']) || mb_strlen((string) $data['edit']['pin']) > 4) {
+        if (!isset($data['edit']['pin']) 
+                || empty($data['edit']['pin']) 
+                || mb_strlen((string) $data['edit']['pin']) > 4
+                || !isset($data['edit']['sum'])) {
             $this->status = false;
             $this->error = ['error' => 'Неправильные параметры'];
         }
